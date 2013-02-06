@@ -14,7 +14,7 @@ Domain			<%= node[:postfix_dkim][:domain] %>
 KeyFile     <%= node[:postfix_dkim][:keyfile] %>
 Selector		<%= node[:postfix_dkim][:selector] %>
 
-# Common settings. See dkim-filter.conf(5) for more information.
+# Common settings. See opendkim.conf(5) for more information.
 AutoRestart		<%= node[:postfix_dkim][:autorestart] ? 'yes' : 'no' %>
 Background		yes
 Canonicalization	simple
@@ -29,9 +29,9 @@ X-Header		no
 ###############################################
 # Other (less-standard) configuration options #
 ###############################################
-# 
+#
 # If enabled, log verification stats here
-#Statistics		/var/log/dkim-filter/dkim-stats
+#Statistics		/var/log/opendkim/dkim-stats
 #
 # KeyList is a file containing tuples of key information. Requires
 # KeyFile to be unset. Each line of the file should be of the format:

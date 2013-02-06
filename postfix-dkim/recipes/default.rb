@@ -17,15 +17,15 @@
 # limitations under the License.
 #
 
-package 'dkim-filter'
+package 'opendkim'
 
-template "/etc/dkim-filter.conf" do
-  source "dkim-filter.conf.erb"
+template "/etc/opendkim.conf" do
+  source "opendkim.conf.erb"
   mode 0755
 end
 
-template "/etc/default/dkim-filter" do
-  source "dkim-filter.erb"
+template "/etc/default/opendkim" do
+  source "opendkim.erb"
   mode 0755
 end
 
@@ -38,13 +38,13 @@ bash "generate and install key" do
   code <<-EOH
     if [ ! -e "#{node[:postfix_dkim][:keyfile]}" ]
     then
-      dkim-genkey #{node[:postfix_dkim][:testmode] ? '-t' : ''} -s #{node[:postfix_dkim][:selector]} -d #{node[:postfix_dkim][:domain]}
+      opendkim-genkey #{node[:postfix_dkim][:testmode] ? '-t' : ''} -s #{node[:postfix_dkim][:selector]} -d #{node[:postfix_dkim][:domain]}
       mv "#{node[:postfix_dkim][:selector]}.private" #{File.basename node[:postfix_dkim][:keyfile]}
     fi
   EOH
 end
 
-service "dkim-filter" do
+service "opendkim" do
   action :start
 end
 

@@ -1,6 +1,6 @@
 = DESCRIPTION:
-  Installs dkim-filter package and basically follows this: https://help.ubuntu.com/community/Postfix/DKIM
-  
+  Installs opendkim package and basically follows this: https://help.ubuntu.com/community/Postfix/DKIM
+
   Doesn't touch postfix, you should do that on your own by modifying your postfix cookbook or something.
   
   This has only been tested on Ubuntu 10.04
@@ -8,14 +8,14 @@
 = REQUIREMENTS:
   Postfix
 
-= ATTRIBUTES:  
-  See `man 5 dkim-filter.conf` for more info on these:
+= ATTRIBUTES:
+  See `man 5 opendkim.conf` for more info on these:
     postfix_dkim[:domain] - Domain to sign (default: your FQDN)
     postfix_dkim[:keyfile] - Full path to location of private key. If it doesn't exist, will use dkim-genkey to make one for you. (default: /etc/mail/dkim.key)
     postfix_dkim[:selector] - See the section on selectors http://dkim.org/info/dkim-faq.html (default: mail)
     postfix_dkim[:autorestart] - Restart on failure (default: false). Should probably flip this to true when you're sure the filter works.
 
-  For /etc/default/dkim-filter:
+  For /etc/default/opendkim:
     postfix_dkim[:socket] - Socket to bind to. (default: 'inet:8891@localhost')
 
   For key generation using key-genkey:
