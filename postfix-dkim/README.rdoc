@@ -14,6 +14,7 @@
     postfix_dkim[:keyfile] - Full path to location of private key. If it doesn't exist, will use dkim-genkey to make one for you. (default: /etc/mail/dkim.key)
     postfix_dkim[:selector] - See the section on selectors http://dkim.org/info/dkim-faq.html (default: mail)
     postfix_dkim[:autorestart] - Restart on failure (default: false). Should probably flip this to true when you're sure the filter works.
+    postfix_dkim[:sender_headers] - SenderHeaders value (default: nil, will use opendkim default). See opendkim manual for more info.
 
   For /etc/default/opendkim:
     postfix_dkim[:socket] - Socket to bind to. (default: 'inet:8891@localhost')

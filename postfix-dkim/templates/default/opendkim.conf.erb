@@ -54,3 +54,5 @@ X-Header		no
 # containing the required headers will not be signed or verified, but will
 # be passed through
 #RequiredHeaders	yes
+
+<%= "SenderHeaders #{node[:postfix_dkim][:sender_headers]}" if node[:postfix_dkim][:sender_headers] %>
