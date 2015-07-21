@@ -1,5 +1,5 @@
 # /etc/opendkim.conf
-default['postfix_dkim']['domain'] = node[:fqdn]
+default['postfix_dkim']['domain'] = node['fqdn']
 default['postfix_dkim']['keyfile'] = '/etc/mail/dkim.key'
 default['postfix_dkim']['selector'] = 'mail'
 default['postfix_dkim']['autorestart'] = false
