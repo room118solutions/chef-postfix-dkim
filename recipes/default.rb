@@ -19,8 +19,8 @@
 
 node.default['postfix']['main']['milter_default_action'] = 'accept'
 node.default['postfix']['main']['milter_protocol']       = 2
-node.default['postfix']['main']['smtpd_milters']         = node[:postfix_dkim][:socket]
-node.default['postfix']['main']['non_smtpd_milters']     = node[:postfix_dkim][:socket]
+node.default['postfix']['main']['smtpd_milters']         = node['postfix_dkim']['socket']
+node.default['postfix']['main']['non_smtpd_milters']     = node['postfix_dkim']['socket']
 
 include_recipe 'postfix'
 
@@ -30,24 +30,34 @@ package 'opendkim-tools' # For opendkim-genkey
 template "/etc/opendkim.conf" do
   source "opendkim.conf.erb"
   mode 0755
+  variables(
+    domain:       node['postfix_dkim']['domain'],
+    keyfile:      node['postfix_dkim']['keyfile'],
+    selector:     node['postfix_dkim']['selector'],
+    autorestart:  (node['postfix_dkim']['autorestart'] ? 'yes' : 'no'),
+    send_headers: node['postfix_dkim']['sender_headers']
+  )
 end
 
 template "/etc/default/opendkim" do
   source "opendkim.erb"
   mode 0755
+  variables(
+    socket: node['postfix_dkim']['socket']
+  )
 end
 
-directory File.dirname(node[:postfix_dkim][:keyfile]) do
+directory File.dirname(node['postfix_dkim']['keyfile']) do
   mode 0755
 end
 
 bash "generate and install key" do
-  cwd File.dirname(node[:postfix_dkim][:keyfile])
+  cwd File.dirname(node['postfix_dkim']['keyfile'])
   code <<-EOH
-    if [ ! -e "#{node[:postfix_dkim][:keyfile]}" ]
+    if [ ! -e "#{node['postfix_dkim']['keyfile']}" ]
     then
-      opendkim-genkey #{node[:postfix_dkim][:testmode] ? '-t' : ''} -s #{node[:postfix_dkim][:selector]} -d #{node[:postfix_dkim][:domain]}
-      mv "#{node[:postfix_dkim][:selector]}.private" #{File.basename node[:postfix_dkim][:keyfile]}
+      opendkim-genkey #{node['postfix_dkim']['testmode'] ? '-t' : ''} -s #{node['postfix_dkim']['selector']} -d #{node['postfix_dkim']['domain']}
+      mv "#{node['postfix_dkim']['selector']}.private" #{File.basename node['postfix_dkim']['keyfile']}
     fi
   EOH
 end
