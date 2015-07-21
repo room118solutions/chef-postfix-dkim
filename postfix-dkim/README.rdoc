@@ -1,11 +1,15 @@
 = DESCRIPTION:
   Installs opendkim package and basically follows this: https://help.ubuntu.com/community/Postfix/DKIM
 
-  Doesn't touch postfix, you should do that on your own by modifying your postfix cookbook or something.
+  Installs Postfix via the official postfix cookbook and adds the following configuration:
+    node.default['postfix']['main']['milter_default_action'] = 'accept'
+    node.default['postfix']['main']['milter_protocol']       = 2
+    node.default['postfix']['main']['smtpd_milters']         = node[:postfix_dkim][:socket]
+    node.default['postfix']['main']['non_smtpd_milters']     = node[:postfix_dkim][:socket]
 
-  This has only been tested on Ubuntu 10.04
+  This has been tested on Ubuntu 10.04 and 14.04
 
-= REQUIREMENTS:
+= DEPENDENCIES:
   Postfix
 
 = ATTRIBUTES:
@@ -23,15 +27,9 @@
     postfix_dkim[:testmode] - Run DKIM in test mode? see "t=" on http://www.dkim.org/specs/rfc4871-dkimbase.html#key-text (default: true)
 
 = USAGE:
-  Set the attributes (defaults should work for most on Ubuntu), and it installs the postfix filter and writes config files.
+  Set the attributes (defaults should work for most on Ubuntu), and it installs and configures postfix and the postfix filter (opendkim).
 
   Will attempt to generate a private key for you, if it doesn't already exist (key file is specified in the postfix_dkim[:keyfile] attribute)
-
-  You should also modify your /etc/postfix/main.cf file to contain something like this (Replacing "inet:localhost:8891" with something that corresponds to postfix_dkim[:socket]):
-    milter_default_action = accept
-    milter_protocol = 2
-    smtpd_milters = inet:localhost:8891
-    non_smtpd_milters = inet:localhost:8891
 
   **** Important *****
   DKIM setup is not complete until you create the necessary TXT DNS record containing your public key, which is located in the postfix_dkim[:selector].txt file within the postfix_dkim[:keyfile] directory.  So, if you're using defaults, this will be located in /etc/mail/mail.txt. You can safely delete or move this file once you've created the DNS record.

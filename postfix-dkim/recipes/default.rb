@@ -17,7 +17,15 @@
 # limitations under the License.
 #
 
+node.default['postfix']['main']['milter_default_action'] = 'accept'
+node.default['postfix']['main']['milter_protocol']       = 2
+node.default['postfix']['main']['smtpd_milters']         = node[:postfix_dkim][:socket]
+node.default['postfix']['main']['non_smtpd_milters']     = node[:postfix_dkim][:socket]
+
+include_recipe 'postfix'
+
 package 'opendkim'
+package 'opendkim-tools' # For opendkim-genkey
 
 template "/etc/opendkim.conf" do
   source "opendkim.conf.erb"
