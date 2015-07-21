@@ -1,3 +1,4 @@
+name             "postfix-dkim"
 maintainer       "Room 118 Solutions, Inc."
 maintainer_email "info@room118solutions.com"
 license          "Apache 2.0"
