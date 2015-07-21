@@ -54,12 +54,10 @@ end
 bash "generate and install key" do
   cwd File.dirname(node['postfix_dkim']['keyfile'])
   code <<-EOH
-    if [ ! -e "#{node['postfix_dkim']['keyfile']}" ]
-    then
-      opendkim-genkey #{node['postfix_dkim']['testmode'] ? '-t' : ''} -s #{node['postfix_dkim']['selector']} -d #{node['postfix_dkim']['domain']}
-      mv "#{node['postfix_dkim']['selector']}.private" #{File.basename node['postfix_dkim']['keyfile']}
-    fi
+    opendkim-genkey #{node['postfix_dkim']['testmode'] ? '-t' : ''} -s #{node['postfix_dkim']['selector']} -d #{node['postfix_dkim']['domain']}
+    mv "#{node['postfix_dkim']['selector']}.private" #{File.basename node['postfix_dkim']['keyfile']}
   EOH
+  not_if { File.exist? node['postfix_dkim']['keyfile'] }
 end
 
 service "opendkim" do
