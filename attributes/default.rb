@@ -10,3 +10,6 @@ default['postfix_dkim']['socket'] = 'inet:8891@localhost' # Ubuntu default - lis
 
 # key generation
 default['postfix_dkim']['testmode'] = true # Running in test mode - see "t=" on http://www.dkim.org/specs/rfc4871-dkimbase.html#key-text
+
+# Postfix's main.cf
+default['postfix_dkim']['postfix_milter_socket'] = 'inet:localhost:8891'

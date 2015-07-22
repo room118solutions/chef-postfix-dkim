@@ -7,8 +7,8 @@ Installs Postfix via the official postfix cookbook and adds the following config
 
     node.default['postfix']['main']['milter_default_action'] = 'accept'
     node.default['postfix']['main']['milter_protocol']       = 2
-    node.default['postfix']['main']['smtpd_milters']         = node[:postfix_dkim][:socket]
-    node.default['postfix']['main']['non_smtpd_milters']     = node[:postfix_dkim][:socket]
+    node.default['postfix']['main']['smtpd_milters']         = node['postfix_dkim']['postfix_milter_socket']
+    node.default['postfix']['main']['non_smtpd_milters']     = node['postfix_dkim']['postfix_milter_socket']
 
 This has been tested on Ubuntu 10.04 and 14.04
 
@@ -30,6 +30,11 @@ For /etc/default/opendkim:
 For key generation using key-genkey:
 
   `postfix_dkim[:testmode]` - Run DKIM in test mode? see "t=" on http://www.dkim.org/specs/rfc4871-dkimbase.html#key-text (default: true)
+
+For Postfix's main.cf:
+
+  `postfix_dkim[:postfix_milter_socket]` -  Opendkim socket in Postfix format, see: http://www.postfix.org/MILTER_README.html#smtp-only-milters (default: 'inet:localhost:8891')
+                                            This should mirror `postfix_dkim['socket']`
 
 USAGE
 =====
