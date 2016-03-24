@@ -18,6 +18,7 @@
 #
 
 package 'opendkim'
+package 'opendkim-tools' # For opendkim-genkey
 
 template "/etc/opendkim.conf" do
   source "opendkim.conf.erb"
