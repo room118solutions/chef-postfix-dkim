@@ -63,7 +63,3 @@ end
 service "opendkim" do
   action :start
 end
-
-service "postfix" do
-  action :restart
-end
