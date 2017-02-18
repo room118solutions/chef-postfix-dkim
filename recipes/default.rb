@@ -60,6 +60,11 @@ bash "generate and install key" do
   not_if { File.exist? node['postfix_dkim']['keyfile'] }
 end
 
+file node['postfix_dkim']['keyfile'] do
+  owner 'opendkim'
+  mode '0600'
+end
+
 service "opendkim" do
   action :start
 end
