@@ -65,6 +65,34 @@ file node['postfix_dkim']['keyfile'] do
   mode '0600'
 end
 
+if platform?('ubuntu') && node['platform_version'].to_i >= 18
+  # On Ubuntu 18/opendkim 2.11,
+  # the systemd service changed, and opendkim
+  # tries to generate an override file,
+  # but it assumes the existing behavior is to
+  # run the service as the opendkim user,
+  # when it's really run by root,
+  # so the override is never written, even if the opendkim user
+  # is specified.  Further, it never quite matches
+  # the old ExecStart value.
+  # To make our lives easier, I'm just replacing the entire service here,
+  # restoring its old behavior, so updates don't suddenly break opendkim.
+
+  execute 'reload-systemd' do
+    command 'systemctl daemon-reload'
+
+    action :nothing
+  end
+
+  cookbook_file '/lib/systemd/system/opendkim.service' do
+    owner 'root'
+    group 'root'
+    mode '0644'
+
+    notifies :run, 'execute[reload-systemd]', :immediately
+  end
+end
+
 service "opendkim" do
   action :start
 end
