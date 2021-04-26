@@ -8,3 +8,5 @@ version          "1.0.8"
 depends          'postfix', '> 3.0.0'
 issues_url       "https://github.com/room118solutions/chef-postfix-dkim/issues"
 source_url       "https://github.com/room118solutions/chef-postfix-dkim"
+
+supports 'ubuntu', '>= 18.04'
