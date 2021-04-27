@@ -10,7 +10,7 @@ Installs Postfix via the official postfix cookbook and adds the following config
     node.default['postfix']['main']['smtpd_milters']         = node['postfix_dkim']['postfix_milter_socket']
     node.default['postfix']['main']['non_smtpd_milters']     = node['postfix_dkim']['postfix_milter_socket']
 
-This has been tested on Ubuntu 10.04 and 14.04
+This has been tested on Ubuntu 18.04 and 20.04
 
 ATTRIBUTES
 ==========
@@ -20,8 +20,6 @@ See `man 5 opendkim.conf` for more info on these:
 * `postfix_dkim['domain']` - Domain to sign (default: your FQDN)
 * `postfix_dkim['keyfile']` - Full path to location of private key. If it doesn't exist, will use dkim-genkey to make one for you. (default: /etc/mail/dkim.key)
 * `postfix_dkim['selector']` - See the section on selectors http://dkim.org/info/dkim-faq.html (default: mail)
-* `postfix_dkim['autorestart']` - Restart on failure (default: false). Should probably flip this to true when you're sure the filter works.
-* `postfix_dkim['sender_headers']` - SenderHeaders value (default: nil, will use opendkim default). See opendkim manual for more info.
 
 For /etc/default/opendkim:
 
